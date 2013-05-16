@@ -1,8 +1,15 @@
 from wsgiref.simple_server import make_server
 
 def app(environ, start_response):
-    start_response('200 OK', [('content-type', 'text/html')])
-    return ['Hello Wrold']
+    response_body = ['%s: %s' %(k,v) for k,v in environ.items()]
+    response_body = '\n'.join(response_body)
+
+    status = '200 OK'
+    response_headers = [('content-type', 'text/plain'), 
+                        ('content-length', str(len(response_body)))]
+    
+    start_response(status, response_headers)
+    return [response_body]
 
 if __name__ == '__main__':
     #from paste import httpserver
